@@ -1,12 +1,15 @@
 const React = require('react')
 const Header = require('./Header')
+const { connector } = require('./Store')
 
 // ES6 class as oppose to React.createClass
 class Details extends React.Component {
+  assignShow (id) {
+    const showArray = this.props.shows.filter((show) => show.imdbID === id)
+    return showArray[0]
+  }
   render () {
-    const params = this.props.params || {}
-    const { title, description, year, poster, trailer } = params
-    // ask Mike bit above
+    const { title, description, year, poster, trailer } = this.assignShow(this.props.params.id)
     return (
       <div className='container'>
         <Header />
@@ -24,9 +27,10 @@ class Details extends React.Component {
   }
 }
 
-const { object } = React.PropTypes
+const { arrayOf, object } = React.PropTypes
 Details.propTypes = {
-  params: object.isRequired
+  params: object,
+  shows: arrayOf(object).isRequired
 }
 
 // useful for debugging
@@ -34,4 +38,4 @@ Details.propTypes = {
 // <code>{JSON.stringify(this.props.params, null, 4)}</code>
 // </pre>
 
-module.exports = Details
+module.exports = connector(Details)
