@@ -6,13 +6,21 @@ const Details = require('./Details')
 
 // this
 const ReactRouter = require('react-router')
-const { Router, Route, IndexRoute, hashHistory } = ReactRouter
+const { Router, Route, IndexRoute, browserHistory } = ReactRouter
 
 // or this?
 // const { Router, Route, IndexRoute, hashHistory } = require('react-router')
 
 const { store } = require('./Store')
 const { Provider } = require('react-redux')
+
+const myRoutes = () => (
+  <Route path='/' component={Layout}>
+    <IndexRoute component={Landing} />
+    <Route path='/search' component={Search} />
+    <Route path='/details/:id' component={Details} />
+  </Route>
+)
 
 // var MyTitle = require('./MyTitle')
 // var MyTitleFact = React.createFactory(MyTitle)
@@ -22,12 +30,8 @@ const App = React.createClass({
   render () {
     return (
       <Provider store={store}>
-        <Router history={hashHistory}>
-          <Route path='/' component={Layout}>
-            <IndexRoute component={Landing} />
-            <Route path='/search' component={Search} />
-            <Route path='/details/:id' component={Details} />
-          </Route>
+        <Router history={browserHistory}>
+         {myRoutes()}
         </Router>
       </Provider>
     )
@@ -41,5 +45,7 @@ const App = React.createClass({
 //       <MyTitle title='OMGLOLWTFBBQ' color='#f06d06' />
 //     </div>
 // )
+
+App.Routes = myRoutes
 
 module.exports = App
